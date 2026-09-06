@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "labWeek2-main 2.slnx"
+    "dotnet.defaultSolution": "labWeek2.slnx"
 }

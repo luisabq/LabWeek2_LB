@@ -10,7 +10,7 @@ public class ChessPieceEditor : Editor
         Transform pieceTransform = piece.transform;
         Transform board = pieceTransform.parent;
 
-        // Draw a tinted border around the current square for quick visual feedback.
+        // Draw a tinted outline so the selected square is easy to spot in scene view.
         float squareSize = piece.squareSize;
         float halfSquare = squareSize * 0.5f;
 
@@ -34,7 +34,7 @@ public class ChessPieceEditor : Editor
             {
                 Vector3 local = board.InverseTransformPoint(newWorldPosition);
 
-                // Snap to the nearest square center, then clamp so pieces cannot leave the board.
+                // Snap to the nearest square center and keep the piece inside board limits.
                 int col = Mathf.RoundToInt((local.x - halfSquare) / squareSize);
                 int row = Mathf.RoundToInt((local.z - halfSquare) / squareSize);
 

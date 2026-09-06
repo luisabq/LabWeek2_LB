@@ -66,6 +66,7 @@ public class ChessPiece : MonoBehaviour
 
     private void UpdateVisual()
     {
+        // Auto-find a child sprite renderer so setup is less fragile in the editor.
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -78,7 +79,7 @@ public class ChessPiece : MonoBehaviour
 
         spriteRenderer.sprite = GetSpriteForType(pieceType);
 
-        // Keep color intent simple: white pieces are pure white, black pieces are a dark neutral.
+        // Keep side colors consistent in every piece prefab.
         spriteRenderer.color = pieceColor == ChessPieceColor.White ? Color.white : BlackPieceColor;
     }
 
@@ -116,9 +117,10 @@ public class ChessPiece : MonoBehaviour
             return;
         }
 
+        // Draw move previews in local board space so markers follow object transforms.
         Gizmos.matrix = transform.localToWorldMatrix;
 
-        // Match preview color with the inspector tint so level editing feels direct.
+        // Reuse the inspector tint so preview color is easy to control while editing.
         Gizmos.color = tint;
 
         int currentCol = GetCurrentColumn();
@@ -176,6 +178,7 @@ public class ChessPiece : MonoBehaviour
         int targetCol = currentCol + offsetX;
         int targetRow = currentRow + offsetZ;
 
+        // Skip markers that would land outside the board bounds.
         if (!IsInsideBoard(targetCol, targetRow))
         {
             return;
@@ -234,11 +237,14 @@ public class ChessPiece : MonoBehaviour
 
     private void DrawPawnMoves(int currentCol, int currentRow, Vector3 markerSize)
     {
+        // White pawns move forward (+z), black pawns move backward (-z).
         int direction = pieceColor == ChessPieceColor.White ? 1 : -1;
 
+        // Show one-step and two-step forward options.
         DrawMove(currentCol, currentRow, 0, direction, markerSize);
         DrawMove(currentCol, currentRow, 0, direction * 2, markerSize);
 
+        // Show diagonal capture squares.
         DrawMove(currentCol, currentRow, -1, direction, markerSize);
         DrawMove(currentCol, currentRow, 1, direction, markerSize);
     }

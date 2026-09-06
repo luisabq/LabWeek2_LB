@@ -11,7 +11,7 @@ public class ChessBoardGizmo : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw in local board space so moving/rotating the board keeps the grid aligned.
+        // Draw in board-local space so the grid follows this transform.
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.color = outlineColor;
 
@@ -22,6 +22,7 @@ public class ChessBoardGizmo : MonoBehaviour
         {
             for (int col = 0; col < boardSize; col++)
             {
+                // Place each wire cell at the center of its square.
                 Vector3 center = new Vector3(
                     col * squareSize + halfSquare,
                     0f,
@@ -32,6 +33,7 @@ public class ChessBoardGizmo : MonoBehaviour
             }
         }
 
+        // Reset to avoid affecting gizmos drawn by other objects.
         Gizmos.matrix = Matrix4x4.identity;
     }
 }
